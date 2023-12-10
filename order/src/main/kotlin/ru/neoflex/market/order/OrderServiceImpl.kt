@@ -2,27 +2,18 @@ package ru.neoflex.market.order
 
 import io.camunda.zeebe.spring.client.annotation.JobWorker
 import io.camunda.zeebe.spring.client.annotation.Variable
-import io.grpc.stub.StreamObserver
+import net.devh.boot.grpc.server.service.GrpcService
 import org.springframework.stereotype.Service
 import ru.neoflex.market.order.OrderServiceOuterClass.OrderRequest
 import ru.neoflex.market.order.OrderServiceOuterClass.OrderResponse
 
-@Service
-class OrderServiceImpl : OrderServiceGrpc.OrderServiceImplBase() {
+@GrpcService
+class OrderServiceImpl : OrderServiceGrpcKt.OrderServiceCoroutineImplBase() {
 
-    @JobWorker(type = "ors")
-    fun fWorker(@Variable input: String): Map<String, Any> {
-        println(input)
-        return mapOf("out" to input + "TEST")
-    }
-
-    @JobWorker(type = "rrs")
-    fun rWorker() {
-        println("r end")
-    }
-
-    @JobWorker(type = "lrs")
-    fun lWorker() {
-        println("l end")
+    override suspend fun getOrder(request: OrderRequest): OrderResponse {
+        return OrderResponse
+            .newBuilder()
+            .apply { response = "${request.id} RESPONSE"}
+            .build()
     }
 }

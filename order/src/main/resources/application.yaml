@@ -4,3 +4,9 @@ zeebe:
       gateway-address: 127.0.0.1:26500
     security:
       plaintext: true
+#grpc:
+#  server:
+#    security:
+#      enabled: true
+#      certificate-chain: file:certificates/server.crt
+#      private-key: file:certificates/server.key
