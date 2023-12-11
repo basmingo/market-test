@@ -1,7 +1,7 @@
 # Docker Compose file for Web Modeler Self-Managed. This file is not intended to be used stand-alone.
-# Use it in combination with docker-compose.yaml:
+# Use it in combination with docker-compose.yaml.yaml:
 #
-#    docker-compose -f docker-compose.yaml -f docker-compose-web-modeler.yaml up -d
+#    docker-compose.yaml -f docker-compose.yaml.yaml -f docker-compose.yaml-web-modeler.yaml up -d
 #
 # Note: this file is using Mailpit to simulate a mail server
 

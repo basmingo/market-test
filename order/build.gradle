@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'io.camunda.spring:spring-boot-starter-camunda:8.3.2-rc4'
+    implementation 'org.springframework.kafka:spring-kafka'
 //    grpc
     implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
     implementation("io.grpc:grpc-netty:${grpcVersion}")

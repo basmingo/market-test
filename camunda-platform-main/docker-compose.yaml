@@ -1,13 +1,13 @@
 # While the Docker images themselves are supported for production usage,
-# this docker-compose.yaml is designed to be used by developers to run
+# this docker-compose.yaml.yaml is designed to be used by developers to run
 # an environment locally. It is not designed to be used in production.
 # We recommend to use Kubernetes in production with our Helm Charts:
 # https://docs.camunda.io/docs/self-managed/platform-deployment/kubernetes-helm/
-# For local development, we recommend using KIND instead of `docker-compose`:
+# For local development, we recommend using KIND instead of `docker-compose.yaml`:
 # https://docs.camunda.io/docs/self-managed/platform-deployment/helm-kubernetes/guides/local-kubernetes-cluster/
 
 # This is a full configuration with Zeebe, Operate, Tasklist, Optimize, Identity, Keycloak, and Elasticsearch
-# See docker-compose-core.yml for a lightweight configuration that does not include Optimize, Identity, and Keycloak.
+# See docker-compose.yaml-core.yml for a lightweight configuration that does not include Optimize, Identity, and Keycloak.
 
 services:
 
