@@ -2,8 +2,8 @@ package ru.neoflex.market.order.service.dto
 
 import java.util.*
 
-data class BookedEventDto(
-    val userId: UUID,
+data class OrderDto(
     val orderId: UUID,
-    val productId: UUID
+    val userId: UUID,
+    val status: String
 )

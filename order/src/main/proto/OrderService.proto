@@ -7,11 +7,12 @@ option java_package = "ru.neoflex.market.order";
 package order;
 
 message OrderRequest {
-  int32 id = 1;
+  string userId = 1;
 }
 
 message OrderResponse {
-  string response = 1;
+  string orderId = 1;
+  string status = 2;
 }
 
 service OrderService {
