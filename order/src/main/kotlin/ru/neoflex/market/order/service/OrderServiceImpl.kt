@@ -19,21 +19,15 @@ class OrderServiceImpl(private val productDao: ProductDao, private val orderDao:
     OrderServiceGrpcKt.OrderServiceCoroutineImplBase() {
 
     override suspend fun getOrder(request: OrderRequest): OrderResponse {
-        println(request)
-        println(request.userId)
-        val uid = UUID.fromString(request.userId)
-        println("UID = $uid")
-        val order = orderDao.getByUserId(uid)
-        println(order)
-
+        val order = getOrderByUserId(UUID.fromString(request.userId))
         return OrderResponse
             .newBuilder()
-            .apply { orderId = "$order?.orderId" }
-            .apply { status = "STATUS_TEST" }
+            .apply { orderId = "${order?.orderId}" }
+            .apply { status = "${order?.status}" }
             .build()
     }
 
-    fun getOrderTest(userId: UUID): OrderDto =
+    fun getOrderByUserId(userId: UUID): OrderDto? =
         orderDao.getByUserId(userId)
 
     fun insertOrder(order: OrderDto) =
@@ -46,6 +40,10 @@ class OrderServiceImpl(private val productDao: ProductDao, private val orderDao:
     )
     fun handleProductBookedEvent(message: BookedEventDto) {
         println(message)
+        val order: OrderDto? = orderDao.getByUserId(message.userId)
+        order ?: orderDao.create(
+            OrderDto(message.orderId, message.userId, "CREATED")
+        )
         productDao.insert(ProductDto(message.productId, LocalDateTime.now(), message.orderId))
     }
 

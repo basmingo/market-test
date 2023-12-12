@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import ru.neoflex.market.order.OrderRequestKt
-import ru.neoflex.market.order.OrderServiceOuterClass.OrderRequest
 import ru.neoflex.market.order.service.dto.BookedEventDto
 import ru.neoflex.market.order.service.dto.OrderDto
 import ru.neoflex.market.order.service.dto.UnbookedEventDto
@@ -62,13 +60,14 @@ class OrderServiceImplTest {
     }
 
     @Test
-    fun getProductDao() {
+    fun getOrderTest() {
         val userId = UUID.randomUUID()
+        val orderId = UUID.randomUUID()
         orderServiceImpl.insertOrder(
-            OrderDto(UUID.randomUUID(), userId, "STATUS_TEST")
+            OrderDto(orderId, userId, "STATUS_TEST")
         )
 
-        val i = orderServiceImpl.getOrderTest(userId)
-        println(i)
+        val i = orderServiceImpl.getOrderByUserId(userId)
+        assert(i == OrderDto(orderId, userId, "STATUS_TEST"))
     }
 }
