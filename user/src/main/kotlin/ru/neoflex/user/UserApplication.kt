@@ -1,4 +1,4 @@
-package ru.neoflex.warehouse
+package ru.neoflex.user
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

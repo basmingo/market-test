@@ -1,10 +1,10 @@
-create table PUBLIC.PRODUCT
+create table PUBLIC."USER"
 (
-    P_ID         UUID                  not null,
-    DISPLAY_NAME CHARACTER VARYING(32) not null,
-    CREATED      TIMESTAMP             not null,
-    UPDATED      TIMESTAMP             not null,
-    STATUS       CHARACTER VARYING(16) not null,
-    constraint PRODUCT_PK
-        primary key (P_ID)
+    U_ID      UUID                  not null,
+    NAME      CHARACTER VARYING(64) not null,
+    LAST_NAME CHARACTER VARYING(64) not null,
+    BALANCE   NUMERIC(20, 3)        not null,
+    AGE       INTEGER               not null,
+    constraint USER_PK
+        primary key (U_ID)
 );

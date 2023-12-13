@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:warehouse_database
+    url: jdbc:h2:mem:user_database
     driver-class-name: org.h2.Driver
     username: admin
     password: password
@@ -13,7 +13,7 @@ spring:
       properties:
         spring.json.add.type.headers: false
 server:
-  port: 8081
+  port: 8082
 grpc:
   server:
-    port: 9091
+    port: 9092

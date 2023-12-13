@@ -26,7 +26,6 @@ repositories {
 dependencies {
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
-    implementation 'io.camunda.spring:spring-boot-starter-camunda:8.3.2-rc4'
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'com.h2database:h2'
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}")
