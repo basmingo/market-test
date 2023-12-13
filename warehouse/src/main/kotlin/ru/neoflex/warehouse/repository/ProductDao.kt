@@ -4,12 +4,13 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
 import ru.neoflex.warehouse.service.Constants
+import ru.neoflex.warehouse.service.TimeUtils
 import ru.neoflex.warehouse.service.dto.ProductDto
 import java.time.LocalDateTime
 import java.util.*
 
 @Service
-class ProductDao(private val jdbcTemplate: JdbcTemplate) {
+class ProductDao(private val jdbcTemplate: JdbcTemplate, private val timeUtils: TimeUtils) {
 
     fun create(productDto: ProductDto) {
         jdbcTemplate
@@ -34,8 +35,8 @@ class ProductDao(private val jdbcTemplate: JdbcTemplate) {
                 ProductDto(
                     productId,
                     displayName,
-                    LocalDateTime.from(Constants.h2DateTimeFormatter.parse(created)),
-                    LocalDateTime.from(Constants.h2DateTimeFormatter.parse(updated)),
+                    timeUtils.parseH2Time(created),
+                    timeUtils.parseH2Time(updated),
                     status
                 )
             }

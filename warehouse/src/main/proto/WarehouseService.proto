@@ -22,17 +22,27 @@ message ProductDeleteResponse {
   string productId = 1;
 }
 
-message ProductStatusUpdateRequest {
+message ProductBookRequest {
   string productId = 1;
-  string status = 2;
+  string userId = 3;
 }
 
-message ProductStatusUpdateResponse {
+message ProductBookResponse {
+  string productId = 1;
+}
+
+message ProductUnbookRequest {
+  string productId = 1;
+  string userId = 3;
+}
+
+message ProductUnbookResponse {
   string productId = 1;
 }
 
 service WarehouseService {
-  rpc updateProduct (ProductStatusUpdateRequest) returns (ProductStatusUpdateResponse) {}
+  rpc bookProduct (ProductBookRequest) returns (ProductBookResponse) {}
+  rpc unbookProduct (ProductUnbookRequest) returns (ProductUnbookResponse) {}
   rpc createProduct (ProductCreateRequest) returns (ProductCreateResponse) {}
   rpc deleteProduct (ProductDeleteRequest) returns (ProductDeleteResponse) {}
 }

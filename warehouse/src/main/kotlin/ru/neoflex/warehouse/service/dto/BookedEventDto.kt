@@ -1,4 +1,4 @@
-package ru.neoflex.market.order.service.dto
+package ru.neoflex.warehouse.service.dto
 
 import java.util.*
 

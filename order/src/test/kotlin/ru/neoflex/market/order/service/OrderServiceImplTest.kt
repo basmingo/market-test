@@ -23,7 +23,6 @@ class OrderServiceImplTest {
             orderServiceImpl.handleProductBookedEvent(
                 BookedEventDto(
                     userId = orderId,
-                    orderId = UUID.randomUUID(),
                     productId = UUID.randomUUID()
                 )
             )
@@ -39,7 +38,6 @@ class OrderServiceImplTest {
             orderServiceImpl.handleProductBookedEvent(
                 BookedEventDto(
                     userId = orderId,
-                    orderId = UUID.randomUUID(),
                     productId = productId
                 )
             )
@@ -55,7 +53,6 @@ class OrderServiceImplTest {
         orderServiceImpl.handleProductBookedEvent(
             BookedEventDto(
                 userId = UUID.randomUUID(),
-                orderId = UUID.randomUUID(),
                 productId = productId
             )
         )

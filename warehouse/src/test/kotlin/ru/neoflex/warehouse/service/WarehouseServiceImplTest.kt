@@ -1,10 +1,13 @@
 package ru.neoflex.warehouse.service
 
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.Repeat
 import ru.neoflex.market.warehouse.WarehouseServiceOuterClass.*
+import java.time.LocalDateTime
 import java.util.*
 
 @SpringBootTest
@@ -13,7 +16,7 @@ class WarehouseServiceImplTest {
     @Autowired
     lateinit var warehouseServiceImpl: WarehouseServiceImpl
 
-    @Test
+    @RepeatedTest(100)
     fun createProductTest() {
         runBlocking {
             val testDisplayName = "TEST_PRODUCT"
@@ -36,7 +39,6 @@ class WarehouseServiceImplTest {
 
     @Test
     fun updateProductTest() {
-        val updatedStatus = "UPDATED_STATUS"
         runBlocking {
             val createReponse: ProductCreateResponse = warehouseServiceImpl.createProduct(
                 ProductCreateRequest
@@ -46,16 +48,16 @@ class WarehouseServiceImplTest {
             )
 
             val responseProductId = createReponse.productId
-            warehouseServiceImpl.updateProduct(
-                ProductStatusUpdateRequest
+            warehouseServiceImpl.bookProduct(
+                ProductBookRequest
                     .newBuilder()
                     .apply { productId = responseProductId }
-                    .apply { status = updatedStatus }
+                    .apply { userId = "${UUID.randomUUID()}" }
                     .build()
             )
 
             val updatedResponse = warehouseServiceImpl.getById(UUID.fromString(createReponse.productId))
-            assert(updatedResponse?.status == updatedStatus)
+            assert(updatedResponse?.status == "BOOKED")
         }
     }
 

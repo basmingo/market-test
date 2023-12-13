@@ -4,12 +4,16 @@ import net.devh.boot.grpc.server.service.GrpcService
 import ru.neoflex.market.warehouse.WarehouseServiceGrpcKt
 import ru.neoflex.market.warehouse.WarehouseServiceOuterClass.*
 import ru.neoflex.warehouse.repository.ProductDao
+import ru.neoflex.warehouse.service.dto.BookedEventDto
 import ru.neoflex.warehouse.service.dto.ProductDto
 import java.time.LocalDateTime
 import java.util.*
 
 @GrpcService
-class WarehouseServiceImpl(private val productDao: ProductDao) :
+class WarehouseServiceImpl(
+    private val productDao: ProductDao,
+    private val productMessageProducer: ProductMessageProducer
+) :
     WarehouseServiceGrpcKt.WarehouseServiceCoroutineImplBase() {
 
     override suspend fun createProduct(request: ProductCreateRequest): ProductCreateResponse {
@@ -30,13 +34,41 @@ class WarehouseServiceImpl(private val productDao: ProductDao) :
             .build()
     }
 
-    override suspend fun updateProduct(request: ProductStatusUpdateRequest): ProductStatusUpdateResponse {
+    override suspend fun bookProduct(request: ProductBookRequest): ProductBookResponse {
+        val currentProductId = UUID.fromString(request.productId)
         productDao.update(
-            productId = UUID.fromString(request.productId),
-            status = request.status
+            productId = currentProductId,
+            status = "BOOKED"
         )
 
-        return ProductStatusUpdateResponse
+        productMessageProducer.productBooked(
+            BookedEventDto(
+                userId = UUID.fromString(request.userId),
+                productId = currentProductId
+            )
+        )
+
+        return ProductBookResponse
+            .newBuilder()
+            .apply { productId = request.productId }
+            .build()
+    }
+
+    override suspend fun unbookProduct(request: ProductUnbookRequest): ProductUnbookResponse {
+        val currentProductId = UUID.fromString(request.productId)
+        productDao.update(
+            productId = currentProductId,
+            status = "AVAILABLE"
+        )
+
+        productMessageProducer.productBooked(
+            BookedEventDto(
+                userId = UUID.fromString(request.userId),
+                productId = currentProductId
+            )
+        )
+
+        return ProductUnbookResponse
             .newBuilder()
             .apply { productId = request.productId }
             .build()

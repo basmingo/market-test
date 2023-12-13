@@ -40,11 +40,13 @@ class OrderServiceImpl(private val productDao: ProductDao, private val orderDao:
     )
     fun handleProductBookedEvent(message: BookedEventDto) {
         println(message)
-        val order: OrderDto? = orderDao.getByUserId(message.userId)
-        order ?: orderDao.create(
-            OrderDto(message.orderId, message.userId, "CREATED")
+        val orderId: UUID? = orderDao.getByUserId(message.userId)?.orderId
+        val possibleOrderId = UUID.randomUUID()
+
+        orderId ?: orderDao.create(
+            OrderDto(possibleOrderId, message.userId, "CREATED")
         )
-        productDao.insert(ProductDto(message.productId, LocalDateTime.now(), message.orderId))
+        productDao.insert(ProductDto(message.productId, LocalDateTime.now(), orderId ?: possibleOrderId))
     }
 
     @KafkaListener(
