@@ -3,7 +3,6 @@ package ru.neoflex.warehouse.repository
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
-import ru.neoflex.warehouse.service.Constants
 import ru.neoflex.warehouse.service.TimeUtils
 import ru.neoflex.warehouse.service.dto.ProductDto
 import java.time.LocalDateTime

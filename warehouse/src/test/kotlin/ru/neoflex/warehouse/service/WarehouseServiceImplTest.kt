@@ -5,9 +5,7 @@ import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.Repeat
 import ru.neoflex.market.warehouse.WarehouseServiceOuterClass.*
-import java.time.LocalDateTime
 import java.util.*
 
 @SpringBootTest

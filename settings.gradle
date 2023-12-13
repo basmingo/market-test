@@ -5,5 +5,5 @@ rootProject.name = 'market-test'
 
 include 'order'
 include 'warehouse'
-include 'warehouse'
+include 'user'
 

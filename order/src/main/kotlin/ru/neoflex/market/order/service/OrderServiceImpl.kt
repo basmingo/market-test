@@ -2,12 +2,12 @@ package ru.neoflex.market.order.service
 
 import net.devh.boot.grpc.server.service.GrpcService
 import org.springframework.kafka.annotation.KafkaListener
-import ru.neoflex.market.order.service.dto.BookedEventDto
 import ru.neoflex.market.order.OrderServiceGrpcKt
 import ru.neoflex.market.order.OrderServiceOuterClass.OrderRequest
 import ru.neoflex.market.order.OrderServiceOuterClass.OrderResponse
 import ru.neoflex.market.order.repository.OrderDao
 import ru.neoflex.market.order.repository.ProductDao
+import ru.neoflex.market.order.service.dto.BookedEventDto
 import ru.neoflex.market.order.service.dto.OrderDto
 import ru.neoflex.market.order.service.dto.ProductDto
 import ru.neoflex.market.order.service.dto.UnbookedEventDto
