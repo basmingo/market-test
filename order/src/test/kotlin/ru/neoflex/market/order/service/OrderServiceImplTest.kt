@@ -22,9 +22,9 @@ class OrderServiceImplTest {
         for (i in 1..5) {
             orderServiceImpl.handleProductBookedEvent(
                 BookedEventDto(
-                    orderId,
-                    UUID.randomUUID(),
-                    UUID.randomUUID()
+                    userId = orderId,
+                    orderId = UUID.randomUUID(),
+                    productId = UUID.randomUUID()
                 )
             )
         }
@@ -37,7 +37,11 @@ class OrderServiceImplTest {
 
         for (productId in productIds) {
             orderServiceImpl.handleProductBookedEvent(
-                BookedEventDto(orderId, UUID.randomUUID(), productId)
+                BookedEventDto(
+                    userId = orderId,
+                    orderId = UUID.randomUUID(),
+                    productId = productId
+                )
             )
         }
 
@@ -49,12 +53,16 @@ class OrderServiceImplTest {
         val productId: UUID = UUID.randomUUID()
 
         orderServiceImpl.handleProductBookedEvent(
-            BookedEventDto(UUID.randomUUID(), UUID.randomUUID(), productId)
+            BookedEventDto(
+                userId = UUID.randomUUID(),
+                orderId = UUID.randomUUID(),
+                productId = productId
+            )
         )
 
         orderServiceImpl.handleProductUnbookedEvent(
             UnbookedEventDto(
-                listOf(productId)
+                productIds = listOf(productId)
             )
         )
     }
@@ -63,11 +71,45 @@ class OrderServiceImplTest {
     fun getOrderTest() {
         val userId = UUID.randomUUID()
         val orderId = UUID.randomUUID()
+
         orderServiceImpl.insertOrder(
-            OrderDto(orderId, userId, "STATUS_TEST")
+            OrderDto(
+                orderId = orderId,
+                userId = userId,
+                status = "STATUS_TEST"
+            )
         )
 
         val i = orderServiceImpl.getOrderByUserId(userId)
         assert(i == OrderDto(orderId, userId, "STATUS_TEST"))
+    }
+
+    @Test
+    fun updateOrderTest() {
+        val orderId = UUID.randomUUID()
+        val userId = UUID.randomUUID()
+
+        orderServiceImpl.insertOrder(
+            OrderDto(
+                orderId = orderId,
+                userId = userId,
+                status = "STATUS_TEST"
+            )
+        )
+
+        orderServiceImpl.updateOrderStatus(
+            status = "NEW",
+            orderId = orderId
+        )
+
+        val result = orderServiceImpl.getOrderByUserId(userId)
+        println(result)
+        assert(
+            result == OrderDto(
+                orderId = orderId,
+                userId = userId,
+                status = "NEW"
+            )
+        )
     }
 }

@@ -56,4 +56,8 @@ class OrderServiceImpl(private val productDao: ProductDao, private val orderDao:
         println(message)
         productDao.delete(message.productIds)
     }
+
+    fun updateOrderStatus(status: String, orderId: UUID) {
+        orderDao.update(status, orderId)
+    }
 }

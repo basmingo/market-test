@@ -31,4 +31,12 @@ class OrderDao(private val jdbcTemplate: JdbcTemplate) {
             order.status
         )
     }
+
+    fun update(status: String, orderId: UUID) {
+        jdbcTemplate.update(
+            "UPDATE PUBLIC.\"ORDER\" SET STATUS = ? WHERE ORDER_ID = ?",
+            status,
+            orderId
+        )
+    }
 }
