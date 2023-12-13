@@ -1,7 +1,9 @@
 package ru.neoflex.warehouse.repository
 
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
+import ru.neoflex.warehouse.service.Constants
 import ru.neoflex.warehouse.service.dto.ProductDto
 import java.time.LocalDateTime
 import java.util.*
@@ -19,6 +21,26 @@ class ProductDao(private val jdbcTemplate: JdbcTemplate) {
                 productDto.updated,
                 productDto.status
             )
+    }
+
+    fun getById(productId: UUID): ProductDto? = try {
+        jdbcTemplate
+            .queryForObject("SELECT P_ID, DISPLAY_NAME, CREATED, UPDATED, STATUS FROM PUBLIC.PRODUCT WHERE P_ID = '$productId'")
+            { rs, _ ->
+                val displayName = rs.getString("DISPLAY_NAME")
+                val created = rs.getString("CREATED")
+                val updated = rs.getString("UPDATED")
+                val status = rs.getString("STATUS")
+                ProductDto(
+                    productId,
+                    displayName,
+                    LocalDateTime.from(Constants.h2DateTimeFormatter.parse(created)),
+                    LocalDateTime.from(Constants.h2DateTimeFormatter.parse(updated)),
+                    status
+                )
+            }
+    } catch (e: EmptyResultDataAccessException) {
+        null
     }
 
     fun update(productId: UUID, status: String) {

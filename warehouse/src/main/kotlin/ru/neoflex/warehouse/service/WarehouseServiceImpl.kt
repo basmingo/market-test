@@ -52,4 +52,6 @@ class WarehouseServiceImpl(private val productDao: ProductDao) :
             .apply { productId = request.productId }
             .build()
     }
+
+    fun getById(productId: UUID): ProductDto? = productDao.getById(productId)
 }
