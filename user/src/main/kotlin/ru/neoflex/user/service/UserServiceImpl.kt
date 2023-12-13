@@ -1,5 +1,6 @@
 package ru.neoflex.user.service
 
+import io.camunda.zeebe.spring.client.annotation.JobWorker
 import net.devh.boot.grpc.server.service.GrpcService
 import ru.neoflex.market.order.UserServiceGrpcKt
 import ru.neoflex.market.order.UserServiceOuterClass.*
@@ -58,4 +59,16 @@ class UserServiceImpl(private val userDao: UserDao) : UserServiceGrpcKt.UserServ
 
     fun getUser(userId: UUID): UserDto? =
         userDao.getById(userId)
+
+        @JobWorker(type = "minusUserBalance")
+    fun minusUserBalanceWorker(userId: UUID, amount: BigDecimal): Boolean {
+        userDao.minusBalance(userId, amount)
+        val bal: BigDecimal? = userDao.getById(userId)?.balance
+        return (bal?.compareTo(BigDecimal.ZERO) ?: -1) >= 0
+    }
+
+        @JobWorker(type = "plusUserBalance")
+    fun plusUserBalanceWorker(userId: UUID, amount: BigDecimal) {
+        userDao.plusBalance(userId, amount)
+    }
 }
