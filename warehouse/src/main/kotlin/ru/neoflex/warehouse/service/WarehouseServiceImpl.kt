@@ -1,5 +1,7 @@
 package ru.neoflex.warehouse.service
 
+import io.camunda.zeebe.spring.client.annotation.JobWorker
+import io.camunda.zeebe.spring.client.annotation.Variable
 import net.devh.boot.grpc.server.service.GrpcService
 import ru.neoflex.market.warehouse.WarehouseServiceGrpcKt
 import ru.neoflex.market.warehouse.WarehouseServiceOuterClass.*
@@ -37,7 +39,7 @@ class WarehouseServiceImpl(
     override suspend fun bookProduct(request: ProductBookRequest): ProductBookResponse {
         val currentProductId = UUID.fromString(request.productId)
         productDao.update(
-            productId = currentProductId,
+            productIds = listOf(currentProductId),
             status = "BOOKED"
         )
 
@@ -57,7 +59,7 @@ class WarehouseServiceImpl(
     override suspend fun unbookProduct(request: ProductUnbookRequest): ProductUnbookResponse {
         val currentProductId = UUID.fromString(request.productId)
         productDao.update(
-            productId = currentProductId,
+            productIds = listOf(currentProductId),
             status = "AVAILABLE"
         )
 

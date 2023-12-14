@@ -19,6 +19,9 @@ class UserServiceImplTest {
     @Autowired
     lateinit var userServiceImpl: UserServiceImpl
 
+    @Autowired
+    lateinit var userWorker: UserWorker
+
     @Test
     fun getUser() {
         runBlocking {
@@ -151,10 +154,9 @@ class UserServiceImplTest {
             )
 
             val responseUserId: UUID = UUID.fromString(response.userId)
-            val result: List<Boolean> = listOf(99.1, 0.1, 0.72, 0.07, 0.01, 0.1)
-                .map {
-                    userServiceImpl.minusUserBalanceWorker(responseUserId, BigDecimal("$it"))
-                }
+            val result: List<Boolean?> = listOf(99.1, 0.1, 0.72, 0.07, 0.01, 0.1)
+                .map { userWorker.minusUserBalanceWorker(responseUserId, "$it") }
+                .map { it["isBalanceValid"] }
 
             assert(result == listOf(true, true, true, true, true, false))
         }

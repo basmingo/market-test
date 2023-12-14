@@ -1,12 +1,13 @@
 package ru.neoflex.market.order.service
 
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import ru.neoflex.market.order.service.dto.BookedEventDto
+import ru.neoflex.market.order.OrderServiceOuterClass.OrderRequest
+import ru.neoflex.market.order.OrderServiceOuterClass.OrderResponse
 import ru.neoflex.market.order.service.dto.OrderDto
-import ru.neoflex.market.order.service.dto.UnbookedEventDto
 import java.util.*
 
 @SpringBootTest
@@ -16,97 +17,62 @@ class OrderServiceImplTest {
     lateinit var orderServiceImpl: OrderServiceImpl
 
     @Test
-    fun bookProductTest() {
-        val orderId: UUID = UUID.randomUUID()
-
-        for (i in 1..5) {
-            orderServiceImpl.handleProductBookedEvent(
-                BookedEventDto(
-                    userId = orderId,
-                    productId = UUID.randomUUID()
-                )
-            )
-        }
-    }
-
-    @Test
-    fun unbookProductsTest() {
-        val orderId: UUID = UUID.randomUUID()
-        val productIds: List<UUID> = (1..5).map { UUID.randomUUID() }
-
-        for (productId in productIds) {
-            orderServiceImpl.handleProductBookedEvent(
-                BookedEventDto(
-                    userId = orderId,
-                    productId = productId
-                )
-            )
-        }
-
-        orderServiceImpl.handleProductUnbookedEvent(UnbookedEventDto(productIds))
-    }
-
-    @Test
-    fun unbookOneProductTest() {
-        val productId: UUID = UUID.randomUUID()
-
-        orderServiceImpl.handleProductBookedEvent(
-            BookedEventDto(
-                userId = UUID.randomUUID(),
-                productId = productId
-            )
-        )
-
-        orderServiceImpl.handleProductUnbookedEvent(
-            UnbookedEventDto(
-                productIds = listOf(productId)
-            )
-        )
-    }
-
-    @Test
     fun getOrderTest() {
-        val userId = UUID.randomUUID()
-        val orderId = UUID.randomUUID()
+        runBlocking {
+            val testUserId = UUID.randomUUID()
+            val testOrderId = UUID.randomUUID()
 
-        orderServiceImpl.insertOrder(
-            OrderDto(
-                orderId = orderId,
-                userId = userId,
-                status = "STATUS_TEST"
+            orderServiceImpl.insertOrder(
+                OrderDto(
+                    orderId = testOrderId,
+                    userId = testUserId,
+                    status = "STATUS_TEST"
+                )
             )
-        )
 
-        val i = orderServiceImpl.getOrderByUserId(userId)
-        assert(i == OrderDto(orderId, userId, "STATUS_TEST"))
+            val returnedOrder = orderServiceImpl.getOrder(
+                OrderRequest
+                    .newBuilder()
+                    .apply { userId = "$testUserId" }
+                    .build()
+            )
+            assert(returnedOrder == OrderResponse.newBuilder()
+                .apply { orderId = "$testOrderId" }
+                .apply { status = "STATUS_TEST" }
+                .build())
+        }
     }
 
     @Test
     fun updateOrderTest() {
-        val orderId = UUID.randomUUID()
-        val userId = UUID.randomUUID()
+        runBlocking {
+            val testOrderId = UUID.randomUUID()
+            val testUserId = UUID.randomUUID()
 
-        orderServiceImpl.insertOrder(
-            OrderDto(
-                orderId = orderId,
-                userId = userId,
-                status = "STATUS_TEST"
+            orderServiceImpl.insertOrder(
+                OrderDto(
+                    orderId = testOrderId,
+                    userId = testUserId,
+                    status = "STATUS_TEST"
+                )
             )
-        )
 
-        orderServiceImpl.updateOrderStatus(
-            status = "NEW",
-            orderId = orderId
-        )
-
-        val result = orderServiceImpl.getOrderByUserId(userId)
-        println(result)
-        assert(
-            result == OrderDto(
-                orderId = orderId,
-                userId = userId,
-                status = "NEW"
+            orderServiceImpl.updateOrderStatus(
+                status = "NEW",
+                orderId = testOrderId
             )
-        )
+
+            val returnedOrder = orderServiceImpl.getOrder(
+                OrderRequest
+                    .newBuilder()
+                    .apply { userId = "$testUserId" }
+                    .build()
+            )
+
+            assert(returnedOrder == OrderResponse.newBuilder()
+                .apply { orderId = "$testOrderId" }
+                .apply { status = "NEW" }
+                .build())
+        }
     }
 }

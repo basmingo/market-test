@@ -3,7 +3,7 @@ package ru.neoflex.warehouse.repository
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
-import ru.neoflex.warehouse.service.TimeUtils
+import ru.neoflex.warehouse.service.utils.TimeUtils
 import ru.neoflex.warehouse.service.dto.ProductDto
 import java.time.LocalDateTime
 import java.util.*
@@ -43,13 +43,12 @@ class ProductDao(private val jdbcTemplate: JdbcTemplate, private val timeUtils: 
         null
     }
 
-    fun update(productId: UUID, status: String) {
+    fun update(productIds: List<UUID>, status: String) {
         jdbcTemplate
             .update(
-                "UPDATE PUBLIC.PRODUCT SET STATUS = ?, UPDATED = ? WHERE P_ID = ?",
+                "UPDATE PUBLIC.PRODUCT SET STATUS = ?, UPDATED = ? WHERE P_ID IN ('${productIds.joinToString("', '")}')",
                 status,
-                LocalDateTime.now(),
-                productId
+                LocalDateTime.now()
             )
     }
 
