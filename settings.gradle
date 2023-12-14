@@ -6,4 +6,4 @@ rootProject.name = 'market-test'
 include 'order'
 include 'warehouse'
 include 'user'
-
+include 'api-gateway'

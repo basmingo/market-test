@@ -18,8 +18,6 @@ spring:
     producer:
       properties:
         spring.json.add.type.headers: false
-#server:
-#  port: 8084
 grpc:
   server:
-    port: 9094
+    port: 9093
