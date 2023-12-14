@@ -1,0 +1,4 @@
+FROM openjdk:17
+COPY /build/libs/*-SNAPSHOT.jar order.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/order.jar"]
