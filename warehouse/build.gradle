@@ -31,7 +31,7 @@ dependencies {
     implementation 'io.camunda.spring:spring-boot-starter-camunda:8.3.2-rc4'
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    grpc
     implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
