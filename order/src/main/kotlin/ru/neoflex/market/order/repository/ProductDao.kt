@@ -1,9 +1,6 @@
 package ru.neoflex.market.order.repository
 
-import io.camunda.common.auth.Product
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.RowMapper
-import org.springframework.jdbc.core.queryForObject
 import org.springframework.stereotype.Service
 import ru.neoflex.market.order.service.dto.ProductDto
 import java.time.LocalDateTime

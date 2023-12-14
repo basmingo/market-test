@@ -2,13 +2,9 @@ package ru.neoflex.market.user.service
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import ru.neoflex.market.order.UserServiceOuterClass.BalanceMinusRequest
-import ru.neoflex.market.order.UserServiceOuterClass.BalanceUpRequest
-import ru.neoflex.market.order.UserServiceOuterClass.UserCreateRequest
-import ru.neoflex.market.order.UserServiceOuterClass.UserDeleteRequest
+import ru.neoflex.market.order.UserServiceOuterClass.*
 import ru.neoflex.market.user.service.dto.UserDto
 import java.math.BigDecimal
 import java.util.*

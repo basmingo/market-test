@@ -1,7 +1,5 @@
 package ru.neoflex.market.warehouse.service
 
-import io.camunda.zeebe.spring.client.annotation.JobWorker
-import io.camunda.zeebe.spring.client.annotation.Variable
 import net.devh.boot.grpc.server.service.GrpcService
 import ru.neoflex.market.warehouse.WarehouseServiceGrpcKt
 import ru.neoflex.market.warehouse.WarehouseServiceOuterClass.*

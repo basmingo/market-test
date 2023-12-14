@@ -6,7 +6,7 @@ import ru.neoflex.market.order.UserServiceOuterClass.*
 import ru.neoflex.market.user.repository.UserDao
 import ru.neoflex.market.user.service.dto.UserDto
 import java.math.BigDecimal
-import java.util.UUID
+import java.util.*
 
 @GrpcService
 class UserServiceImpl(private val userDao: UserDao) : UserServiceGrpcKt.UserServiceCoroutineImplBase() {

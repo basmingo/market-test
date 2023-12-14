@@ -25,6 +25,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(':proto')
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'io.camunda.spring:spring-boot-starter-camunda:8.3.2-rc4'

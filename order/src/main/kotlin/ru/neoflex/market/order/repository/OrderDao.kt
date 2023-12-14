@@ -2,7 +2,6 @@ package ru.neoflex.market.order.repository
 
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.queryForObject
 import org.springframework.stereotype.Service
 import ru.neoflex.market.order.service.dto.OrderDto
 import java.util.*

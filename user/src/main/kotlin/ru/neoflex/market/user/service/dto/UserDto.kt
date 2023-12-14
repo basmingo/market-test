@@ -1,7 +1,7 @@
 package ru.neoflex.market.user.service.dto
 
 import java.math.BigDecimal
-import java.util.UUID
+import java.util.*
 
 data class UserDto(
     val userId: UUID,
