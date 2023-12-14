@@ -1,0 +1,4 @@
+FROM openjdk:17
+COPY /build/libs/*-SNAPSHOT.jar api-gateway.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/api-gateway.jar"]

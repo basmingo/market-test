@@ -32,7 +32,6 @@ dependencies {
     implementation 'com.h2database:h2'
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-//    implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    grpc
     implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
@@ -42,6 +41,7 @@ dependencies {
     implementation("com.google.protobuf:protobuf-kotlin:${protobufVersion}")
 }
 
+tasks.register('prepareKotlinBuildScriptModel') {}
 tasks.withType(KotlinCompile) {
     kotlinOptions {
         freeCompilerArgs += '-Xjsr305=strict'
@@ -52,25 +52,3 @@ tasks.withType(KotlinCompile) {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:${protobufVersion}"
-    }
-    plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
-        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
-    }
-    generateProtoTasks {
-        all().forEach {
-            it.plugins {
-                grpc {}
-                grpckt {}
-            }
-            it.builtins {
-                kotlin {}
-            }
-        }
-    }
-}
-

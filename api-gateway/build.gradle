@@ -25,6 +25,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(':proto')
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions'
@@ -41,6 +42,7 @@ dependencies {
     implementation("com.google.protobuf:protobuf-kotlin:${protobufVersion}")
 }
 
+tasks.register('prepareKotlinBuildScriptModel') {}
 tasks.withType(KotlinCompile) {
     kotlinOptions {
         freeCompilerArgs += '-Xjsr305=strict'
@@ -58,25 +60,3 @@ tasks.withType(KotlinCompile) {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:${protobufVersion}"
-    }
-    plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
-        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
-    }
-    generateProtoTasks {
-        all().forEach {
-            it.plugins {
-                grpc {}
-                grpckt {}
-            }
-            it.builtins {
-                kotlin {}
-            }
-        }
-    }
-}
-
