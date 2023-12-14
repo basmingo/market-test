@@ -14,7 +14,6 @@ version = '0.0.1-SNAPSHOT'
 def grpcVersion = '1.57.2'
 def grpcKotlinVersion = '1.4.1'
 def protobufVersion = '3.24.1'
-def coroutinesVersion = '1.7.3'
 
 java {
 	sourceCompatibility = '17'

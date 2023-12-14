@@ -1,2 +1,12 @@
 server:
   port: 8080
+routers:
+  orders:
+    host: localhost
+    grpc-port: 9091
+  warehouse:
+    host: localhost
+    grpc-port: 9092
+  users:
+    host: localhost
+    grpc-port: 9093
