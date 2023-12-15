@@ -1,5 +1,7 @@
 package ru.neoflex.market.user.service
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import net.devh.boot.grpc.server.service.GrpcService
 import ru.neoflex.market.order.UserServiceGrpcKt
 import ru.neoflex.market.order.UserServiceOuterClass.*
@@ -56,6 +58,36 @@ class UserServiceImpl(private val userDao: UserDao) : UserServiceGrpcKt.UserServ
             .build()
     }
 
-    fun getUser(userId: UUID): UserDto? =
-        userDao.getById(userId)
+    override suspend fun getUser(request: UserRequest): UserResponse {
+        val responseBuilder = UserResponse.newBuilder()
+        val user: UserDto? = userDao.getById(UUID.fromString(request.userId))
+        return user?.let {
+            responseBuilder
+                .apply {
+                    userId = "${it.userId}"
+                    name = it.name
+                    balance = "${it.balance}"
+                    age = "${it.age}"
+                }
+                .build()
+        } ?: responseBuilder.build()
+    }
+
+    override fun getUsers(request: Empty): Flow<UserResponse> {
+        return userDao
+            .getAll()
+            .map {
+                UserResponse
+                    .newBuilder()
+                    .apply {
+                        userId = "${it.userId}"
+                        name = it.name
+                        lastName = it.lastName
+                        balance = "${it.balance}"
+                        age = "${it.age}"
+                    }
+                    .build()
+            }
+            .asFlow()
+    }
 }

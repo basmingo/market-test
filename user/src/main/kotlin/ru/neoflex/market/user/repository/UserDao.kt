@@ -1,5 +1,8 @@
 package ru.neoflex.market.user.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flow
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
@@ -54,13 +57,29 @@ class UserDao(private val jdbcTemplate: JdbcTemplate) {
                 .queryForObject(
                     "SELECT NAME, LAST_NAME, BALANCE, AGE FROM PUBLIC.\"USER\" WHERE U_ID = '$userId'"
                 ) { rs, _ ->
-                    val name = rs.getString("NAME")
-                    val lastName = rs.getString("LAST_NAME")
-                    val balance = BigDecimal(rs.getString("BALANCE"))
-                    val age = rs.getString("AGE").toInt()
-                    UserDto(userId, name, lastName, balance, age)
+                    UserDto(
+                        userId = userId,
+                        name = rs.getString("NAME"),
+                        lastName = rs.getString("LAST_NAME"),
+                        balance = BigDecimal(rs.getString("BALANCE")),
+                        age = rs.getString("AGE").toInt()
+                    )
                 }
         } catch (e: EmptyResultDataAccessException) {
             null
         }
+
+    fun getAll(): List<UserDto> =
+        jdbcTemplate
+            .query(
+                "SELECT U_ID, NAME, LAST_NAME, BALANCE, AGE FROM PUBLIC.\"USER\""
+            ) { rs, _ ->
+                UserDto(
+                    userId = UUID.fromString(rs.getString("U_ID")),
+                    name = rs.getString("NAME"),
+                    lastName = rs.getString("LAST_NAME"),
+                    balance = BigDecimal(rs.getString("BALANCE")),
+                    age = rs.getString("AGE").toInt()
+                )
+            }
 }
