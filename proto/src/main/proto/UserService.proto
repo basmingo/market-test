@@ -6,11 +6,25 @@ option java_package = "ru.neoflex.market.order";
 
 package order;
 
+message Empty {}
+
+message UserResponse {
+  string userId = 1;
+  string name = 2;
+  string lastName = 3;
+  string balance = 4;
+  string age = 5;
+}
+
 message UserCreateRequest {
   string name = 1;
   string last_name = 2;
   string balance = 3;
   int32 age = 4;
+}
+
+message UserRequest {
+  string userId = 1;
 }
 
 message UserCreateResponse {
@@ -24,7 +38,6 @@ message UserDeleteRequest {
 message UserDeleteResponse {
   string userId = 1;
 }
-
 
 message BalanceUpRequest {
   string userId = 1;
@@ -45,6 +58,8 @@ message BalanceMinusResponse {
 }
 
 service UserService {
+  rpc getUsers (Empty) returns (stream UserResponse) {}
+  rpc getUser (UserRequest) returns (UserResponse) {}
   rpc userCreate (UserCreateRequest) returns (UserCreateResponse) {}
   rpc userDelete (UserDeleteRequest) returns (UserDeleteResponse) {}
   rpc balanceUp (BalanceUpRequest) returns (BalanceUpResponse) {}
