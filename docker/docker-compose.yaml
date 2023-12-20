@@ -15,6 +15,10 @@ services:
       - order-service
       - warehouse-service
       - user-service
+    environment:
+      - routers.orders.host=order-service
+      - routers.warehouse.host=warehouse-service
+      - routers.users.host=user-service
 
   order-service:
     container_name: order-service
@@ -23,8 +27,6 @@ services:
     image: order:latest
     networks:
       - services
-    ports:
-      - "8081:8080"
 
   warehouse-service:
     container_name: warehouse-service
@@ -33,8 +35,6 @@ services:
     image: warehouse:latest
     networks:
       - services
-    ports:
-      - "8082:8080"
 
   user-service:
     container_name: user-service
@@ -43,8 +43,6 @@ services:
     image: user:latest
     networks:
       - services
-    ports:
-      - "8083:8080"
 
   kafka:
     image: bitnami/kafka:latest
