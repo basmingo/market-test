@@ -1,4 +1,4 @@
-package ru.neoflex.market.api.gateway.controller
+package ru.neoflex.market.api.gateway.controller.v1
 
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactor.asFlux
@@ -12,14 +12,14 @@ import ru.neoflex.market.api.gateway.dto.UserCreateDto
 import ru.neoflex.market.api.gateway.dto.UserDto
 import ru.neoflex.market.order.UserServiceOuterClass.*
 import java.math.BigDecimal
-import java.util.UUID
+import java.util.*
 
 @RestController
 @RequestMapping("/users")
 class UserRouter(private val grpcClient: GrpcClient) {
 
-    @PostMapping("/create")
-    fun usersCreate(@RequestBody userCreateDto: Mono<UserCreateDto>): Mono<String> =
+    @PostMapping
+    fun create(@RequestBody userCreateDto: Mono<UserCreateDto>): Mono<UUID> =
         userCreateDto
             .map {
                 grpcClient
@@ -36,11 +36,11 @@ class UserRouter(private val grpcClient: GrpcClient) {
                             .build()
                     )
             }
-            .map { it.userId }
+            .map { UUID.fromString(it.userId) }
 
-    @PostMapping("/delete")
-    fun userDelete(@RequestBody deleteUserId: Mono<UUID>): Mono<String> =
-        deleteUserId
+    @DeleteMapping
+    fun delete(@RequestParam("id") deleteUserId: UUID): Mono<UUID> =
+        Mono.just(deleteUserId)
             .map {
                 grpcClient
                     .getUserServiceClient()
@@ -53,10 +53,10 @@ class UserRouter(private val grpcClient: GrpcClient) {
                             .build()
                     )
             }
-            .map { it.userId }
+            .map { UUID.fromString(it.userId) }
 
-    @PostMapping("/balance/up")
-    fun balanceUp(@RequestBody balanceUpRequestDto: Mono<BalanceUpRequestDto>): Mono<String> =
+    @PutMapping("/balance/up")
+    fun balanceUp(@RequestBody balanceUpRequestDto: Mono<BalanceUpRequestDto>): Mono<UUID> =
         balanceUpRequestDto
             .map {
                 grpcClient
@@ -71,10 +71,10 @@ class UserRouter(private val grpcClient: GrpcClient) {
                             .build()
                     )
             }
-            .map { it.userId }
+            .map { UUID.fromString(it.userId) }
 
-    @PostMapping("/balance/down")
-    fun balanceDown(@RequestBody balanceDownRequest: Mono<BalanceDownRequestDto>): Mono<String> =
+    @PutMapping("/balance/down")
+    fun balanceDown(@RequestBody balanceDownRequest: Mono<BalanceDownRequestDto>): Mono<UUID> =
         balanceDownRequest
             .map {
                 grpcClient
@@ -89,10 +89,10 @@ class UserRouter(private val grpcClient: GrpcClient) {
                             .build()
                     )
             }
-            .map { it.userId }
+            .map { UUID.fromString(it.userId) }
 
-    @GetMapping("/get/all")
-    fun getUsers(): Flux<UserDto> {
+    @GetMapping("/search")
+    fun getAll(): Flux<UserDto> {
         return grpcClient
             .getUserServiceClientCoroutines()
             .getUsers(Empty.newBuilder().build())
@@ -108,8 +108,8 @@ class UserRouter(private val grpcClient: GrpcClient) {
             .asFlux()
     }
 
-    @GetMapping("/get")
-    fun getUser(@RequestParam("user_id") userId: UUID): Mono<UserDto> =
+    @GetMapping
+    fun get(@RequestParam("id") userId: UUID): Mono<UserDto> =
         Mono.just(userId)
             .map {
                 grpcClient

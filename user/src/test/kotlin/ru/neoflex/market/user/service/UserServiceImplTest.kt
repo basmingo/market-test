@@ -1,14 +1,11 @@
 package ru.neoflex.market.user.service
 
-import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import ru.neoflex.market.order.UserServiceOuterClass.*
-import ru.neoflex.market.user.service.dto.UserDto
-import java.math.BigDecimal
 import java.util.*
 
 @SpringBootTest
