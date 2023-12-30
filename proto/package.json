@@ -1,0 +1,22 @@
+{
+  "name": "proto",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@bufbuild/buf": "^1.28.1",
+    "@bufbuild/protobuf": "^1.6.0",
+    "@bufbuild/protoc-gen-es": "^1.6.0",
+    "@connectrpc/connect": "^1.2.0",
+    "@connectrpc/connect-web": "^1.2.0",
+    "@connectrpc/protoc-gen-connect-es": "^1.2.0",
+    "@grpc/grpc-js": "^1.9.13",
+    "google-protobuf": "3.21.0"
+  },
+  "devDependencies": {
+    "@types/google-protobuf": "^3.15.12",
+    "@types/node": "^20",
+    "grpc-tools": "^1.11.3",
+    "ts-protoc-gen": "^0.15.0",
+    "typescript": "4.3.4"
+  }
+}

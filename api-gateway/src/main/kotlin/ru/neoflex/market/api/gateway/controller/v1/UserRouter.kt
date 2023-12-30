@@ -18,6 +18,7 @@ import java.util.*
 @RequestMapping("/users")
 class UserRouter(private val grpcClient: GrpcClient) {
 
+    @CrossOrigin
     @PostMapping
     fun create(@RequestBody userCreateDto: Mono<UserCreateDto>): Mono<UUID> =
         userCreateDto
@@ -91,6 +92,7 @@ class UserRouter(private val grpcClient: GrpcClient) {
             }
             .map { UUID.fromString(it.userId) }
 
+    @CrossOrigin
     @GetMapping("/search")
     fun getAll(): Flux<UserDto> {
         return grpcClient

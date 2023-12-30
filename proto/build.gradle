@@ -1,11 +1,13 @@
+import com.google.protobuf.gradle.ExecutableLocator
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id 'org.springframework.boot' version '3.2.0'
-	id 'io.spring.dependency-management' version '1.1.4'
-	id 'org.jetbrains.kotlin.jvm' version '1.9.20'
-	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.20'
-	id 'com.google.protobuf' version "0.9.4"
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.20'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.20'
+    id 'com.google.protobuf' version "0.9.4"
+    id "build.buf" version "0.8.5"
 }
 
 group = 'ru.neoflex.market'
@@ -17,56 +19,63 @@ def protobufVersion = '3.24.1'
 def coroutinesVersion = '1.7.3'
 
 java {
-	sourceCompatibility = '17'
+    sourceCompatibility = '17'
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.jetbrains.kotlin:kotlin-reflect'
-	implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}")
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}")
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    grpc
-	implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
-	implementation("io.grpc:grpc-netty:${grpcVersion}")
-	implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
-	implementation("io.grpc:grpc-protobuf:${grpcVersion}")
-	implementation("com.google.protobuf:protobuf-kotlin:${protobufVersion}")
+    implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
+    implementation("io.grpc:grpc-netty:${grpcVersion}")
+    implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
+    implementation("io.grpc:grpc-protobuf:${grpcVersion}")
+    implementation("com.google.protobuf:protobuf-kotlin:${protobufVersion}")
 }
 
 tasks.register('prepareKotlinBuildScriptModel') {}
 tasks.withType(KotlinCompile) {
-	kotlinOptions {
-		freeCompilerArgs += '-Xjsr305=strict'
-		jvmTarget = '17'
-	}
+    kotlinOptions {
+        freeCompilerArgs += '-Xjsr305=strict'
+        jvmTarget = '17'
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
+}
+
+buf {
+    configFileLocation = rootProject.file('buf.yml')
+    generate {
+        configFileLocation = rootProject.file('buf.gen.yaml')
+    }
 }
 
 protobuf {
-	protoc {
-		artifact = "com.google.protobuf:protoc:${protobufVersion}"
-	}
-	plugins {
-		grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
-		grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
-	}
-	generateProtoTasks {
-		all().forEach {
-			it.plugins {
-				grpc {}
-				grpckt {}
-			}
-			it.builtins {
-				kotlin {}
-			}
-		}
-	}
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.plugins {
+                grpc {}
+                grpckt {}
+            }
+            task.builtins {
+                kotlin {}
+            }
+        }
+    }
 }
 
