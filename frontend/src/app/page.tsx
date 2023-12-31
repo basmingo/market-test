@@ -15,10 +15,10 @@ const transport = createGrpcTransport({
 export default async function Home() {
     return (
         <main className={styles.main}>
-            <div style={{border: "1px solid red"}}>
+            <div>
                 <UserList/>
+                <CreateUser />
             </div>
-            <CreateUser />
             {/*<div className={styles.description}>*/}
             {/*</div>*/}
         </main>

@@ -3,59 +3,59 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 
 export default function CreateUser() {
-    const [name, setName] = useState()
+    const [username, setUsername] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [balance, setBalance] = useState("")
+    const [age, setAge] = useState(0)
 
     return (
-        <div style={{color: "red", border: "1px solid", padding: "15px"}}>
-            <div> name: <InputInfo/></div>
-            <div> last name:</div>
-            <div> age:</div>
-            <div> balance:</div>
-            <button style={{color: "white", background: "red", padding: "5px", border: "1px solid"}}
-                    onClick={() => create()}> CREATE
+        <div style={{color: "red", border: "1px solid", padding: "15px", margin: "20px"}}>
+            <InputInfo callback={(message: string) => setUsername(message)} placeholder={"Name"}/>
+            <InputInfo callback={(message: string) => setLastName(message)} placeholder={"Last name"}/>
+            <InputInfo callback={(message: number) => setAge(message)} placeholder={"Age"}/>
+            <InputInfo callback={(message: string) => setBalance(message)} placeholder={"Balance"}/>
+            <button style={{color: "white", background: "red", padding: "5px", border: "1px solid", margin: "5px"}}
+                    onClick={() => create({
+                        "name": username,
+                        "lastName": lastName,
+                        "balance": balance,
+                        "age": age
+                    })}> CREATE
             </button>
         </div>
     )
 }
 
-function create() {
-    const rb =
-
-        fetch("http://localhost:8080/users", {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                method: "POST",
-                body: JSON.stringify(
-                    {
-                        "age": 1488,
-                        "balance": "100000",
-                        "lastName": "Valya",
-                        "name": "Golubeva"
-                    }
-                )
-            }
-        ).then(
-            function (response) {
-                if (response.status !== 200) {
-                    console.log('Looks like there was a problem. Status Code: ' +
-                        response.status);
-                    return;
-                }
-                response.json().then(function (data) {
-                    console.log(data);
-                });
-            }
-        ).catch(function (err) {
-            console.log('Fetch Error :-S', err);
-        })
+function create(user: User) {
+    fetch("http://localhost:8080/users", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify(user)
+        }
+    )
 }
 
-const InputInfo = () => {
-    return <input/>
+const InputInfo = (props: Prop) => {
+    return <div style={{display: "flex", flexWrap: "nowrap", justifyContent: "space-between", margin: "5px"}}>
+        <input
+            placeholder={props.placeholder}
+            style={{color: "red", width: "100%", border: "0", borderBottom: "1px solid red", background: "transparent"}}
+            onChange={value => props.callback(value.target.value)}
+        />
+    </div>
 }
 
-function a() {
-    console.log("!")
+interface User {
+    name: string
+    lastName: string
+    balance: string
+    age: number
+}
+
+interface Prop {
+    placeholder: string;
+    callback: (text: any) => void;
 }

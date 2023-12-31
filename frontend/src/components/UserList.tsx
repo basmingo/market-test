@@ -14,14 +14,15 @@ export default function UserList() {
     )
 
     return (
-        <div>
+        <div style={{color: "red", border: "1px solid red", margin: "20px"}}>
+            <div style={{margin: "5px"}}> USERS DATABASE </div>
             {users.length != 0 ? users.map(user => <User value={user}/>) : "No users found"}
         </div>
     )
 }
 
 const User = (userInfo: any) => {
-    return (<div style={{color: "red", margin: "40px", border: "1px solid", padding: "12px", borderRadius: "5px", boxShadow: "5px 5px 10px red"}}>
+    return (<div style={{display: "flex", flexDirection: "column", color: "red", margin: "40px", border: "1px solid", padding: "12px", borderRadius: "5px", boxShadow: "5px 5px 12px red"}}>
         <div> {userInfo.value.name} {userInfo.value.lastName} </div>
         <div> Age: {userInfo.value.age} </div>
         <div> Balance: {userInfo.value.balance} </div>
