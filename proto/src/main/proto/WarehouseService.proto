@@ -40,7 +40,17 @@ message ProductUnbookResponse {
   string productId = 1;
 }
 
+message Product {
+  string displayName = 1;
+  string created = 2;
+  string updated = 3;
+  string status = 4;
+}
+
+message Empty {}
+
 service WarehouseService {
+  rpc getProducts (Empty) returns (stream Product) {}
   rpc bookProduct (ProductBookRequest) returns (ProductBookResponse) {}
   rpc unbookProduct (ProductUnbookRequest) returns (ProductUnbookResponse) {}
   rpc createProduct (ProductCreateRequest) returns (ProductCreateResponse) {}
