@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - 'main'
+    paths:
+      - 'user/**'
 jobs:
   docker:
     runs-on: ubuntu-latest
