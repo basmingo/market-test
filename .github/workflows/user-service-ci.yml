@@ -21,6 +21,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
+          version: 0.0.1
           context: user
           push: true
           tags: basmingo/user:latest
