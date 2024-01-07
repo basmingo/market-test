@@ -4,34 +4,31 @@ on:
     branches:
       - 'main'
 jobs:
-  gradle:
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-      - name: Execute Gradle build
-        run: gradle bootJar
-        working-directory: user
   docker:
-    needs: gradle
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+        
       - name: Checkout
         uses: actions/checkout@v3
+        
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+    
+      - name: Execute Gradle build
+        run: gradle bootJar
+        working-directory: user
+        
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
       - name: Build and push
         run: docker buildx build -t basmingo/user:latest .
         working-directory: user
