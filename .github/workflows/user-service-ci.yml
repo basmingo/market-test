@@ -15,7 +15,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Execute Gradle build
-        run: gradle build
+        run: gradle bootJar
         working-directory: user
   docker:
     runs-on: ubuntu-latest
