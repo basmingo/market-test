@@ -33,8 +33,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: user
-          push: true
-          tags: basmingo/user:latest
+        run: docker build -t basmingo/user:latest
+        working-directory: user
+        # uses: docker/build-push-action@v5
+        # with:
+        #   context: user
+        #   push: true
+        #   tags: basmingo/user:latest
