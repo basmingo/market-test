@@ -18,6 +18,7 @@ jobs:
         run: gradle bootJar
         working-directory: user
   docker:
+    needs: gradle
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
