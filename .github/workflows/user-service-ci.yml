@@ -14,12 +14,8 @@ jobs:
           java-version: 17 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Init gradle wrapper
-        run: gradle wrapper
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
       - name: Execute Gradle build
-        run: ./gradlew build
+        run: gradle build
         working-directory: user
   docker:
     runs-on: ubuntu-latest
