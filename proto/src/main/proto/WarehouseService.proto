@@ -41,10 +41,11 @@ message ProductUnbookResponse {
 }
 
 message Product {
-  string displayName = 1;
-  string created = 2;
-  string updated = 3;
-  string status = 4;
+  string productId = 1;
+  string displayName = 2;
+  string created = 3;
+  string updated = 4;
+  string status = 5;
 }
 
 message Empty {}

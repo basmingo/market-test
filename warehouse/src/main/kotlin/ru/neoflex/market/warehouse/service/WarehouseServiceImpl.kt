@@ -1,5 +1,7 @@
 package ru.neoflex.market.warehouse.service
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import net.devh.boot.grpc.server.service.GrpcService
 import ru.neoflex.market.warehouse.WarehouseServiceGrpcKt
 import ru.neoflex.market.warehouse.WarehouseServiceOuterClass.*
@@ -84,6 +86,22 @@ class WarehouseServiceImpl(
             .apply { productId = request.productId }
             .build()
     }
+
+    override fun getProducts(request: Empty): Flow<Product> =
+        productDao
+            .getAll()
+            .map {
+                Product.newBuilder()
+                    .apply {
+                        productId = "${it.productId}"
+                        displayName = it.displayName
+                        created = "${it.created}"
+                        updated = "${it.updated}"
+                        status = it.status
+                    }
+                    .build()
+            }
+            .asFlow()
 
     fun getById(productId: UUID): ProductDto? = productDao.getById(productId)
 }

@@ -11,6 +11,7 @@ import ru.neoflex.market.order.UserServiceGrpc.UserServiceBlockingStub
 import ru.neoflex.market.order.UserServiceGrpcKt.UserServiceCoroutineStub
 import ru.neoflex.market.warehouse.WarehouseServiceGrpc
 import ru.neoflex.market.warehouse.WarehouseServiceGrpc.WarehouseServiceBlockingStub
+import ru.neoflex.market.warehouse.WarehouseServiceGrpcKt.WarehouseServiceCoroutineStub
 
 @Configuration
 class GrpcClient {
@@ -66,6 +67,15 @@ class GrpcClient {
     fun getWarehouseServiceClient(): WarehouseServiceBlockingStub =
         WarehouseServiceGrpc
             .newBlockingStub(
+                ManagedChannelBuilder
+                    .forAddress(warehouseHost, warehouseGrpcPort.toInt())
+                    .usePlaintext()
+                    .build()
+            )
+
+    @Bean
+    fun getWarehouseServiceClientCoroutines(): WarehouseServiceCoroutineStub =
+        WarehouseServiceCoroutineStub(
                 ManagedChannelBuilder
                     .forAddress(warehouseHost, warehouseGrpcPort.toInt())
                     .usePlaintext()

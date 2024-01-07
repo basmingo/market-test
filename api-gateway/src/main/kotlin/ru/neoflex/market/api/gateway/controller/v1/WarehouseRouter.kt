@@ -1,9 +1,13 @@
 package ru.neoflex.market.api.gateway.controller.v1
 
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactor.asFlux
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import ru.neoflex.market.api.gateway.config.GrpcClient
 import ru.neoflex.market.api.gateway.dto.ProductCreateRequestDto
+import ru.neoflex.market.api.gateway.dto.ProductDto
 import ru.neoflex.market.api.gateway.dto.ProductRequest
 import ru.neoflex.market.warehouse.WarehouseServiceOuterClass.*
 import java.util.*
@@ -54,6 +58,7 @@ class WarehouseRouter(private val grpcClient: GrpcClient) {
         }
     }
 
+    @CrossOrigin
     @PostMapping
     fun create(@RequestBody displayName: Mono<ProductCreateRequestDto>): Mono<UUID> =
         displayName
@@ -91,4 +96,22 @@ class WarehouseRouter(private val grpcClient: GrpcClient) {
             .map {
                 UUID.fromString(it.productId)
             }
+
+    @CrossOrigin
+    @GetMapping("/search")
+    fun getAll(): Flux<ProductDto> {
+        return grpcClient
+            .getWarehouseServiceClientCoroutines()
+            .getProducts(Empty.newBuilder().build())
+            .map {
+                ProductDto(
+                    UUID.fromString(it.productId),
+                    it.displayName,
+                    it.created,
+                    it.updated,
+                    it.status
+                )
+            }
+            .asFlux()
+    }
 }

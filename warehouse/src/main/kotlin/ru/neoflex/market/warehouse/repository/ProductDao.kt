@@ -59,4 +59,22 @@ class ProductDao(private val jdbcTemplate: JdbcTemplate, private val timeUtils: 
                 productId
             )
     }
+
+    fun getAll(): List<ProductDto> =
+        jdbcTemplate
+            .query("SELECT P_ID, DISPLAY_NAME, CREATED, UPDATED, STATUS FROM PUBLIC.PRODUCT")
+            { rs, _ ->
+                val productId = rs.getString("P_ID")
+                val displayName = rs.getString("DISPLAY_NAME")
+                val created = rs.getString("CREATED")
+                val updated = rs.getString("UPDATED")
+                val status = rs.getString("STATUS")
+                ProductDto(
+                    UUID.fromString(productId),
+                    displayName,
+                    timeUtils.parseH2Time(created),
+                    timeUtils.parseH2Time(updated),
+                    status
+                )
+            }
 }

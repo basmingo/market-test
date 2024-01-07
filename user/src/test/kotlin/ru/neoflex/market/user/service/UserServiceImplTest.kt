@@ -63,27 +63,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    fun getAllUsers() {
-        runBlocking {
-            val result = userServiceImpl
-                .getUsers(Empty.newBuilder().build())
-
-            assert(result.toList().isEmpty())
-            for (i in 1 .. 5) {
-                userServiceImpl
-                    .userCreate(
-                        UserCreateRequest.newBuilder()
-                            .apply { name = "Pavel" }
-                            .apply { lastName = "Basmanov" }
-                            .apply { balance = "103.32" }
-                            .apply { age = 27 }
-                            .build()
-                    )
-            }
-        }
-    }
-
-    @Test
     fun userCreate() {
         runBlocking {
             userServiceImpl

@@ -1,0 +1,43 @@
+.block {
+    display: flex;
+    flex-direction: column;
+    color: #ff0000;
+    border: 1px solid;
+    margin: 20px;
+    padding: 15px;
+}
+
+.info_table {
+    margin: 20px;
+    border: 1px solid;
+    padding: 17px;
+    border-radius: 5px;
+    box-shadow: 5px 5px 12px
+}
+
+.warehouse {
+    margin-top: 5px;
+    border-bottom: 1px solid;
+}
+
+.create_user_form {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin: 2px;
+}
+
+.input_form {
+    color: inherit;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid;
+    background: transparent;
+}
+
+.std_button {
+    color: white;
+    background: red;
+    padding: 5px;
+    border: 1px solid;
+    margin-top: 14px;
+}
