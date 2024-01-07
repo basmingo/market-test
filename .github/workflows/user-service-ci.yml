@@ -19,6 +19,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
       - name: Execute Gradle build
         run: ./gradlew build
+        working-directory: user
   docker:
     runs-on: ubuntu-latest
     steps:
