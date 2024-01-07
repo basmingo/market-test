@@ -1,0 +1,7 @@
+global:
+  name: user
+  port: 9093
+  replicas: 1
+
+image:
+  full: basmingo/user:latest

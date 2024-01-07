@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: warehouse-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: warehouse
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: warehouse
+    spec:
+      containers:
+        - image: warehouse:latest
+          imagePullPolicy: Never
+          name: warehouse-name
+          ports:
+            - containerPort: 9092
+          env:
+            - name: spring.kafka.bootstrap-servers
+              value: "kafka:9092"

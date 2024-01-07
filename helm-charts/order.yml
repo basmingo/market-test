@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+        - image: order:latest
+          imagePullPolicy: Never
+          name: order-name
+          ports:
+            - containerPort: 9091
+          env:
+            - name: spring.kafka.bootstrap-servers
+              value: "kafka:9092"
