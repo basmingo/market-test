@@ -35,10 +35,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
       - name: Build and push
-        run: docker buildx build -t basmingo/user:latest .
-        working-directory: user
-        # uses: docker/build-push-action@v5
-        # with:
-        #   context: user
-        #   push: true
-        #   tags: basmingo/user:latest
+        uses: docker/build-push-action@v5
+        with:
+          context: user
+          push: true
+          tags: basmingo/user:latest
