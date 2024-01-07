@@ -14,6 +14,8 @@ jobs:
           java-version: 17 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
       - name: Execute Gradle build
         run: ./gradlew build
         working-directory: user
