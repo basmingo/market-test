@@ -1,0 +1,48 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.0' apply false
+    id 'io.spring.dependency-management' version '1.1.4' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.9.20' apply false
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.20' apply false
+    id 'com.google.protobuf' version "0.9.4" apply false
+}
+
+def grpcVersion = '1.57.2'
+def grpcKotlinVersion = '1.4.1'
+def protobufVersion = '3.24.1'
+def coroutinesVersion = '1.7.3'
+def jvmVersion = '17'
+
+
+subprojects {
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+    repositories { mavenCentral() }
+
+    java { sourceCompatibility = jvmVersion }
+
+    dependencies {
+        implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+        implementation 'org.jetbrains.kotlin:kotlin-reflect'
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}")
+    }
+
+    if (getPlugins().contains('com.google.protobuf')) {
+        dependencies {
+            implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
+            implementation("io.grpc:grpc-netty:${grpcVersion}")
+            implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
+            implementation("io.grpc:grpc-protobuf:${grpcVersion}")
+            implementation("com.google.protobuf:protobuf-kotlin:${protobufVersion}")
+        }
+    }
+
+    tasks.register('prepareKotlinBuildScriptModel') {}
+    if (getPlugins().contains('org.jetbrains.kotlin.plugin.spring')) {
+        tasks.withType(KotlinCompile) {
+            kotlinOptions {
+                freeCompilerArgs += '-Xjsr305=strict'
+                jvmTarget = jvmVersion
+            }
+        }
+        tasks.named('test') { useJUnitPlatform() }
+    }
+}
