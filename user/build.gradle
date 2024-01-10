@@ -6,6 +6,10 @@ apply plugin: 'com.google.protobuf'
 group = 'ru.neoflex.market'
 version = '0.0.1-SNAPSHOT'
 
+def grpcVersion = '1.57.2'
+def grpcKotlinVersion = '1.4.1'
+def protobufVersion = '3.24.1'
+
 dependencies {
     implementation project(':proto')
     implementation 'org.springframework.kafka:spring-kafka'
@@ -13,4 +17,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'io.camunda.spring:spring-boot-starter-camunda:8.3.2-rc4'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
+    implementation("io.grpc:grpc-netty:${grpcVersion}")
+    implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
+    implementation("io.grpc:grpc-protobuf:${grpcVersion}")
+    implementation("com.google.protobuf:protobuf-kotlin:${protobufVersion}")
 }

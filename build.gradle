@@ -10,7 +10,7 @@ def grpcVersion = '1.57.2'
 def grpcKotlinVersion = '1.4.1'
 def protobufVersion = '3.24.1'
 def coroutinesVersion = '1.7.3'
-def jvmVersion = '17'
+def jvmVersion = '19'
 
 
 subprojects {
