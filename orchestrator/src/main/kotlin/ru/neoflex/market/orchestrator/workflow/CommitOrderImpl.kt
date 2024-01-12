@@ -5,12 +5,12 @@ import io.temporal.workflow.Workflow
 import org.example.ru.neoflex.market.orchestrator.output.port.OrderOutputPort
 import org.example.ru.neoflex.market.orchestrator.output.port.ProductOutputPort
 import org.example.ru.neoflex.market.orchestrator.output.port.UserOutputPort
-import ru.neoflex.market.order.OrchestrationGrpcKt
-import ru.neoflex.market.order.Orhcestration.*
+import ru.neoflex.market.order.OrchestratorServiceGrpcKt
+import ru.neoflex.market.order.OrhcestratorService
 import java.math.BigDecimal
 import java.util.*
 
-class CommitOrderImpl : CommitOrder, OrchestrationGrpcKt.OrchestrationCoroutineImplBase() {
+class CommitOrderImpl : CommitOrder, OrchestratorServiceGrpcKt.OrchestratorServiceCoroutineImplBase() {
 
     val orderService = Workflow.newActivityStub(OrderOutputPort::class.java)
     val userService = Workflow.newActivityStub(UserOutputPort::class.java)
@@ -32,8 +32,8 @@ class CommitOrderImpl : CommitOrder, OrchestrationGrpcKt.OrchestrationCoroutineI
         }
     }
 
-    override suspend fun commitOrder(request: CommitOrderRequest): CommitOrderResponse {
+    override suspend fun commitOrder(request: OrhcestratorService.CommitOrderRequest): OrhcestratorService.CommitOrderResponse {
         execute(UUID.fromString(request.userId), BigDecimal(request.amount))
-        return CommitOrderResponse.newBuilder().build()
+        return OrhcestratorService.CommitOrderResponse.newBuilder().build()
     }
 }
