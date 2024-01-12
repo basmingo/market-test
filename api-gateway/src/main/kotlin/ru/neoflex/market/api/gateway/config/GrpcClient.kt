@@ -4,6 +4,7 @@ import io.grpc.ManagedChannelBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import ru.neoflex.market.order.OrchestratorServiceGrpc.*
 import ru.neoflex.market.order.OrderServiceGrpc
 import ru.neoflex.market.order.OrderServiceGrpc.OrderServiceBlockingStub
 import ru.neoflex.market.order.UserServiceGrpc
@@ -33,6 +34,12 @@ class GrpcClient {
 
     @Value("\${routers.users.grpc-port}")
     lateinit var userGrpcPort: String
+
+    @Value("\${routers.orchestrator.host}")
+    lateinit var orchestrationHost: String
+
+    @Value("\${routers.orchestrator.grpc-port}")
+    lateinit var orchestrationGrpcPort: String
 
     @Bean
     fun getUserServiceClient(): UserServiceBlockingStub =
@@ -78,6 +85,15 @@ class GrpcClient {
         WarehouseServiceCoroutineStub(
                 ManagedChannelBuilder
                     .forAddress(warehouseHost, warehouseGrpcPort.toInt())
+                    .usePlaintext()
+                    .build()
+            )
+
+    @Bean
+    fun getOrchestratorServiceClient(): OrchestratorServiceBlockingStub =
+        newBlockingStub(
+                ManagedChannelBuilder
+                    .forAddress(orchestrationHost, orchestrationGrpcPort.toInt())
                     .usePlaintext()
                     .build()
             )

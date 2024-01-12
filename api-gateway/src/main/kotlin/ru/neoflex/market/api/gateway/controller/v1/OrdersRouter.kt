@@ -1,21 +1,19 @@
 package ru.neoflex.market.api.gateway.controller.v1
 
-import io.camunda.zeebe.client.ZeebeClient
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 import ru.neoflex.market.api.gateway.config.GrpcClient
+import ru.neoflex.market.api.gateway.dto.OrderPurchaseRequestDto
 import ru.neoflex.market.api.gateway.dto.OrderResponseDto
 import ru.neoflex.market.order.OrderServiceOuterClass.OrderRequest
+import ru.neoflex.market.order.OrhcestratorService.CommitOrderRequest
 import java.util.*
 
 @RestController
 @RequestMapping("/orders")
-class OrdersRouter(private val grpcClient: GrpcClient,
-                   private val zeebeClient: ZeebeClient) {
+class OrdersRouter(private val grpcClient: GrpcClient) {
 
-    @Value("\${order.bpmn.process.id}")
-    lateinit var orderBpmnProcessId: String
 
     @GetMapping
     fun get(@RequestParam("id") userId: UUID): Mono<OrderResponseDto> =
@@ -38,12 +36,23 @@ class OrdersRouter(private val grpcClient: GrpcClient,
             }
 
     @PostMapping("/purchase")
-    fun purchase() {
-        zeebeClient
-            .newCreateInstanceCommand()
-            .bpmnProcessId(orderBpmnProcessId)
-            .latestVersion()
-            .send()
-            .join()
+    fun purchase(orderPurchaseDto: Mono<OrderPurchaseRequestDto>): Mono<Unit> {
+        orderPurchaseDto
+            .publishOn(Schedulers.parallel())
+            .subscribe {
+                grpcClient
+                    .getOrchestratorServiceClient()
+                    .commitOrder(
+                        CommitOrderRequest
+                            .newBuilder()
+                            .apply {
+                                this.userId = "${it.userId}"
+                                this.amount = "${it.amount}"
+                            }
+                            .build()
+                    )
+            }
+
+        return Mono.just(Unit)
     }
 }

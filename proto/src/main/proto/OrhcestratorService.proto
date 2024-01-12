@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "ru.neoflex.market.order";
+
+package order;
+
+message CommitOrderRequest {
+  string userId = 1;
+  string amount = 2;
+}
+
+message CommitOrderResponse {
+}
+
+service OrchestratorService {
+  rpc commitOrder(CommitOrderRequest) returns (CommitOrderResponse) {}
+}

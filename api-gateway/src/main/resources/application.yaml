@@ -20,3 +20,6 @@ routers:
   users:
     host: localhost
     grpc-port: 9093
+  orchestrator:
+    host: localhost
+    grpc-port: 9094

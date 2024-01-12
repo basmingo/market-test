@@ -8,3 +8,5 @@ include 'warehouse'
 include 'user'
 include 'api-gateway'
 include 'proto'
+include 'orchestrator'
+

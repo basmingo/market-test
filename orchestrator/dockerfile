@@ -1,0 +1,4 @@
+FROM openjdk:17
+COPY /build/libs/*-SNAPSHOT.jar orchestrator.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/orchestrator.jar"]
