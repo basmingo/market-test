@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:19
 COPY /build/libs/*-SNAPSHOT.jar warehouse.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/warehouse.jar"]
