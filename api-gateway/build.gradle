@@ -6,8 +6,27 @@ apply plugin: 'com.google.protobuf'
 group = 'ru.neoflex.market'
 version = '0.0.1-SNAPSHOT'
 
+def grpcVersion = '1.57.2'
+def grpcKotlinVersion = '1.4.1'
+def protobufVersion = '3.24.1'
+def coroutinesVersion = '1.7.3'
+
 dependencies {
     implementation project(':proto')
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
+    implementation("io.grpc:grpc-netty:${grpcVersion}")
+    implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
+    implementation("io.grpc:grpc-protobuf:${grpcVersion}")
+    implementation("com.google.protobuf:protobuf-kotlin:${protobufVersion}")
+    testImplementation 'io.projectreactor:reactor-test'
 }
+
+tasks.named('test') { useJUnitPlatform() }

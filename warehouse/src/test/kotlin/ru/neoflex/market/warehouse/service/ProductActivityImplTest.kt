@@ -9,10 +9,10 @@ import ru.neoflex.market.warehouse.WarehouseServiceOuterClass
 import java.util.*
 
 @SpringBootTest
-class ProductWorkerTest {
+class ProductActivityImplTest {
 
     @Autowired
-    lateinit var productWorker: ProductWorker
+    lateinit var productActivityImpl: ProductActivityImpl
 
     @Autowired
     lateinit var warehouseServiceImpl: WarehouseServiceImpl
@@ -20,7 +20,7 @@ class ProductWorkerTest {
     @Test
     fun toDeliveryProductWorker() {
         runBlocking {
-            val response: List<String> = (1..5)
+            val response: List<UUID> = (1..5)
                 .map {
                     warehouseServiceImpl.createProduct(
                         WarehouseServiceOuterClass.ProductCreateRequest
@@ -29,12 +29,12 @@ class ProductWorkerTest {
                             .build()
                     )
                 }
-                .map { it.productId }
+                .map { UUID.fromString(it.productId) }
 
-            productWorker.toDeliveryProduct(response)
+            productActivityImpl.toDeliveryProduct(response)
 
             val resultStatuses: List<String?> = response
-                .map { UUID.fromString(it) }
+                .map { it }
                 .map { warehouseServiceImpl.getById(it) }
                 .map { it?.status }
 
@@ -45,7 +45,7 @@ class ProductWorkerTest {
     @Test
     fun onAvailableProductWorker() {
         runBlocking {
-            val response: List<String> = (1..5)
+            val response: List<UUID> = (1..5)
                 .map {
                     warehouseServiceImpl.createProduct(
                         WarehouseServiceOuterClass.ProductCreateRequest
@@ -54,13 +54,13 @@ class ProductWorkerTest {
                             .build()
                     )
                 }
-                .map { it.productId }
+                .map { UUID.fromString(it.productId) }
 
-            productWorker.toDeliveryProduct(response)
-            productWorker.onAvailableProduct(response)
+            productActivityImpl.toDeliveryProduct(response)
+            productActivityImpl.onAvailableProduct(response)
 
             val resultStatuses: List<String?> = response
-                .map { UUID.fromString(it) }
+                .map { it }
                 .map { warehouseServiceImpl.getById(it) }
                 .map { it?.status }
 

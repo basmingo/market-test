@@ -6,14 +6,15 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import ru.neoflex.market.order.service.dto.BookedEventDto
+import ru.neoflex.market.order.service.dto.OrderDetailsResponse
 import ru.neoflex.market.order.service.dto.OrderDto
 import java.util.*
 
 @SpringBootTest
-class OrderWorkerTest {
+class OrderActivityImplTest {
 
     @Autowired
-    lateinit var orderWorker: OrderWorker
+    lateinit var orderActivity: OrderActivityImpl
 
     @Autowired
     lateinit var orderServiceImpl: OrderServiceImpl
@@ -47,8 +48,8 @@ class OrderWorkerTest {
                 )
             }
 
-            val details = orderWorker.getOrderDetails("$testUserId")
-            assert(details == mapOf("orderId" to "$testOrderId", "productIds" to productIds.map { "$it" }))
+            val details = orderActivity.getOrderDetails(testUserId)
+            assert(details == OrderDetailsResponse(testOrderId, productIds))
         }
     }
 }

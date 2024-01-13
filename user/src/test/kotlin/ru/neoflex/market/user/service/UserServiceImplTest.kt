@@ -1,11 +1,11 @@
 package ru.neoflex.market.user.service
 
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import ru.neoflex.market.order.UserServiceOuterClass.*
+import java.math.BigDecimal
 import java.util.*
 
 @SpringBootTest
@@ -15,7 +15,7 @@ class UserServiceImplTest {
     lateinit var userServiceImpl: UserServiceImpl
 
     @Autowired
-    lateinit var userWorker: UserWorker
+    lateinit var userActivityImpl: UserActivityImpl
 
     @Test
     fun getUser() {
@@ -190,8 +190,7 @@ class UserServiceImplTest {
 
             val responseUserId: UUID = UUID.fromString(response.userId)
             val result: List<Boolean?> = listOf(99.1, 0.1, 0.72, 0.07, 0.01, 0.1)
-                .map { userWorker.minusUserBalanceWorker(responseUserId, "$it") }
-                .map { it["isBalanceValid"] }
+                .map { userActivityImpl.minusUserBalance(responseUserId, BigDecimal(it)) }
 
             assert(result == listOf(true, true, true, true, true, false))
         }

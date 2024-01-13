@@ -36,13 +36,4 @@ subprojects {
     }
 
     tasks.register('prepareKotlinBuildScriptModel') {}
-    if (getPlugins().contains('org.jetbrains.kotlin.plugin.spring')) {
-        tasks.withType(KotlinCompile) {
-            kotlinOptions {
-                freeCompilerArgs += '-Xjsr305=strict'
-                jvmTarget = jvmVersion
-            }
-        }
-        tasks.named('test') { useJUnitPlatform() }
-    }
 }

@@ -15,7 +15,7 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'io.camunda.spring:spring-boot-starter-camunda:8.3.2-rc4'
+    implementation 'io.temporal:temporal-sdk:1.17.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
@@ -24,3 +24,5 @@ dependencies {
     implementation("io.grpc:grpc-protobuf:${grpcVersion}")
     implementation("com.google.protobuf:protobuf-kotlin:${protobufVersion}")
 }
+
+tasks.named('test') { useJUnitPlatform() }
