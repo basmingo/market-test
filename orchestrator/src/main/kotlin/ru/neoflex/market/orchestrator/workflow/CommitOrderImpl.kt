@@ -1,7 +1,8 @@
 package ru.neoflex.market.orchestrator.workflow
 
 import io.temporal.activity.ActivityOptions
-import io.temporal.failure.ActivityFailure
+import io.temporal.failure.TemporalFailure
+import io.temporal.workflow.Saga
 import io.temporal.workflow.Workflow
 import ru.neoflex.market.orchestrator.output.port.OrderOutputPort
 import ru.neoflex.market.orchestrator.output.port.ProductOutputPort
@@ -12,6 +13,7 @@ import java.util.*
 
 class CommitOrderImpl : CommitOrder {
 
+    private val saga = Saga(Saga.Options.Builder().build())
     private val orderService: OrderOutputPort = Workflow.newActivityStub(
         OrderOutputPort::class.java,
         ActivityOptions
@@ -42,21 +44,15 @@ class CommitOrderImpl : CommitOrder {
         try {
             val orderDetails = orderService.getOrderDetails(userId)
 
-            val isBalanceEnough = userService.minusUserBalance(userId, amount)
-            if (!isBalanceEnough) {
-                userService.plusUserBalance(userId, amount)
-            }
+            saga.addCompensation(userService::plusUserBalance, userId, amount)
+            userService.minusUserBalance(userId, amount)
 
+            saga.addCompensation(productService::onAvailableProduct, orderDetails.productIds)
             orderService.setStatusToDelivery(orderDetails.orderId)
-            try {
-                productService.toDeliveryProduct(orderDetails.productIds)
-            } catch (e: ActivityFailure) {
-                productService.onAvailableProduct(orderDetails.productIds)
-                userService.plusUserBalance(userId, amount)
-            }
 
-        } catch (e: ActivityFailure) {
-            println("FAILURE")
+        } catch (e: TemporalFailure) {
+            saga.compensate()
+            throw e
         }
 
     }
