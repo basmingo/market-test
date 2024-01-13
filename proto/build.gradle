@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id "build.buf" version "0.8.5"
 }
@@ -47,6 +49,13 @@ protobuf {
                 kotlin {}
             }
         }
+    }
+}
+
+tasks.withType(KotlinCompile) {
+    kotlinOptions {
+        freeCompilerArgs += '-Xjsr305=strict'
+        jvmTarget = '17'
     }
 }
 
