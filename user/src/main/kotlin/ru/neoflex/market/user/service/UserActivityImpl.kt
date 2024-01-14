@@ -12,7 +12,7 @@ class UserActivityImpl(private val userDao: UserDao) : UserActivity {
     override fun minusUserBalance(userId: UUID, amount: BigDecimal): Boolean {
         userDao.minusBalance(userId, amount)
         val currentBalance: BigDecimal? = userDao.getById(userId)?.balance
-        if ((currentBalance?.compareTo(BigDecimal.ZERO) ?: -1) >= 0) {
+        if ((currentBalance?.compareTo(BigDecimal.ZERO) ?: -1) < 0) {
             throw RuntimeException("Balance of user is not enough")
         }
 
