@@ -1,3 +1,7 @@
 grpc:
   server:
     port: 9094
+
+temporal:
+  host: localhost
+  port: 7233
