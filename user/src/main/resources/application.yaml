@@ -21,3 +21,6 @@ spring:
 grpc:
   server:
     port: 9093
+temporal:
+  host: localhost
+  port: 7233
