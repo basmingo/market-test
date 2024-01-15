@@ -1,30 +1,39 @@
-package ru.neoflex.market.order.service.worker
+package ru.neoflex.market.warehouse.config
 
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowClientOptions
 import io.temporal.serviceclient.WorkflowServiceStubs
 import io.temporal.serviceclient.WorkflowServiceStubsOptions
+import io.temporal.worker.Worker
 import io.temporal.worker.WorkerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
-import ru.neoflex.market.order.service.OrderActivityImpl
-import javax.annotation.PostConstruct
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import ru.neoflex.market.warehouse.service.ProductActivityImpl
 
-@Service
-class OrderActivityWorker {
+@Configuration
+class ApplicationConfig {
 
     @Value("\${temporal.host}")
     lateinit var temporalHost: String
+
+    @Value("\${temporal.worker-name}")
+    lateinit var temporalWorkerName: String
+
+    @Value("\${temporal.namespace}")
+    lateinit var temporalNamespace: String
 
     @Value("\${temporal.port}")
     lateinit var temporalPort: String
 
     @Autowired
-    lateinit var orderActivity: OrderActivityImpl
+    lateinit var productActivity: ProductActivityImpl
 
-    @PostConstruct
-    fun workerStart() {
+    @Bean
+    @ConditionalOnProperty(prefix = "temporal", name = ["enabled"], havingValue = "true")
+    fun productActivityWorker(): Worker {
         val options: WorkflowServiceStubsOptions = WorkflowServiceStubsOptions
             .newBuilder()
             .setTarget("$temporalHost:$temporalPort")
@@ -32,14 +41,15 @@ class OrderActivityWorker {
 
         val clientOptions: WorkflowClientOptions = WorkflowClientOptions
             .newBuilder()
-            .setNamespace("default")
+            .setNamespace(temporalNamespace)
             .build()
 
         val client: WorkflowClient =
             WorkflowClient.newInstance(WorkflowServiceStubs.newServiceStubs(options), clientOptions)
         val workerFactory = WorkerFactory.newInstance(client)
-        val worker = workerFactory.newWorker("OrderServiceActivity")
-        worker.registerActivitiesImplementations(orderActivity)
+        val worker: Worker = workerFactory.newWorker(temporalWorkerName)
+        worker.registerActivitiesImplementations(productActivity)
         workerFactory.start()
+        return worker
     }
 }
