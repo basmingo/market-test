@@ -7,7 +7,7 @@ export default function UserList() {
     const [users, setUsers] = useState([{}])
 
     useEffect(() => {
-            fetch("http://localhost:8080/users/search")
+            fetch("http://pbasmanov.example.com/api/users/search")
                 .then(r => r.json())
                 .then(r => setUsers(r))
         }

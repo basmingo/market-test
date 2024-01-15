@@ -28,7 +28,7 @@ export default function CreateUser() {
 }
 
 function create(user: User) {
-    fetch("http://localhost:8080/users", {
+    fetch("http://pbasmanov.example.com/api/users", {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

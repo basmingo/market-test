@@ -7,7 +7,7 @@ export default function ProductList() {
     const [product, setProduct]: [Product[], any] = useState([])
 
     useEffect(() => {
-            fetch("http://localhost:8080/products/search")
+            fetch("http://pbasmanov.example.com/api/products/search")
                 .then(r => r.json())
                 .then(r => setProduct(r))
         }
